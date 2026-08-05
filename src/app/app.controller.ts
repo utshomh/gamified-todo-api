@@ -1,10 +1,13 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 
+import { ApiErrors } from '../common/errors/api-errors.decorator';
+
 import { AppService } from './app.service';
 import { StatusResponseDto } from './dto/status.dto';
 import { PongResponseDto, PingRequestDto } from './dto/ping.dto';
 
+@ApiErrors('INTERNAL_ERROR')
 @Controller({ path: 'app', version: '1' })
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -23,6 +26,7 @@ export class AppController {
     return this.appService.getStatus();
   }
 
+  @ApiErrors('VALIDATION_ERROR')
   @Post('/ping')
   @ApiOperation({
     summary: 'Ping the server',
