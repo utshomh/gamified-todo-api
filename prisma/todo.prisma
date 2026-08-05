@@ -1,0 +1,31 @@
+enum TodoStatus {
+    OPEN
+    COMPLETED
+    ARCHIVED
+}
+
+enum TodoDifficulty {
+    EASY
+    MEDIUM
+    HARD
+}
+
+model Todo {
+    id          String         @id @default(cuid())
+    userId      String
+    title       String
+    description String?
+    status      TodoStatus     @default(OPEN)
+    difficulty  TodoDifficulty
+    xpReward    Int
+    dueAt       DateTime?
+    completedAt DateTime?
+    xpAwardedAt DateTime?
+    createdAt   DateTime       @default(now())
+    updatedAt   DateTime       @updatedAt
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, status, createdAt(sort: Desc)])
+    @@index([userId, dueAt])
+}
