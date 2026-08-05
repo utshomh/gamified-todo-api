@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@prisma/client/extension';
+import { PrismaClient } from '@prisma/client';
 
 import { AppConfigService } from '../config/app-config.service';
 
@@ -11,7 +11,6 @@ export class PrismaService extends PrismaClient {
       connectionString: appConfig.databaseUrl,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     super({ adapter });
   }
 }
