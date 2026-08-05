@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 import {
   ArgumentsHost,
   Catch,
@@ -11,27 +10,7 @@ import type { Request, Response } from 'express';
 
 import { AppError } from './app-error';
 import { ERROR_CATALOG, ErrorCode } from './error-catalog';
-
-function genericCodeForStatus(status: number): ErrorCode {
-  switch (status) {
-    case HttpStatus.BAD_REQUEST:
-      return 'VALIDATION_ERROR';
-    case HttpStatus.UNAUTHORIZED:
-      return 'UNAUTHORIZED';
-    case HttpStatus.FORBIDDEN:
-      return 'FORBIDDEN';
-    case HttpStatus.NOT_FOUND:
-      return 'NOT_FOUND';
-    case HttpStatus.CONFLICT:
-      return 'CONFLICT';
-    default:
-      return 'INTERNAL_ERROR';
-  }
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
+import { genericCodeForStatus, isRecord } from './error.utils';
 
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter {

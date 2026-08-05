@@ -3,6 +3,7 @@ import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 
 import { ApiErrorResponseDto } from './api-error-response.dto';
 import { ERROR_CATALOG, ErrorCode } from './error-catalog';
+import { genericCodeForStatus } from './error.utils';
 
 function groupByStatus(codes: readonly ErrorCode[]) {
   const groups = new Map<number, ErrorCode[]>();
@@ -40,8 +41,9 @@ function schemaForError(code: ErrorCode) {
           },
           message: {
             type: 'string',
-            example: definition.message,
+            example: definition.status,
           },
+          details: {},
         },
       },
     ],
@@ -74,13 +76,14 @@ export function ApiErrors<const Codes extends readonly ErrorCode[]>(
                 return [
                   code,
                   {
-                    summary: definition.description,
+                    summary: genericCodeForStatus(definition.status),
                     value: {
                       statusCode: definition.status,
                       code,
                       message: definition.message,
                       timestamp: '2026-08-06T00:00:00.000Z',
                       path: '/api/v1/example',
+                      details: {},
                     },
                   },
                 ];
