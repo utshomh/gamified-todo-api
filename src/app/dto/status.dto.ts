@@ -14,7 +14,7 @@ export class StatusResponseDto {
   version!: string;
 
   @ApiProperty({
-    example: '2026-08-05T17:50:00.000Z',
+    example: '2004-07-09T17:50:00.000Z',
     description: 'Current server time',
   })
   timestamp!: string;

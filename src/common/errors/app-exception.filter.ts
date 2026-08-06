@@ -53,6 +53,7 @@ export class AppExceptionFilter implements ExceptionFilter {
     }
 
     response.status(status).json({
+      ok: false,
       statusCode: status,
       code,
       message,

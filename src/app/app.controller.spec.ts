@@ -1,20 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppController } from './app.controller';
+
+import { PrismaService } from '../prisma/prisma.service';
 
 describe('AppController', () => {
   let appController: AppController;
 
+  const prismaMock = {
+    $queryRaw: jest.fn(),
+  };
+
   beforeEach(async () => {
-    const frozenDate = new Date(Date.UTC(2011, 0, 1, 0, 0, 0));
+    jest.clearAllMocks();
+    const frozenDate = new Date(Date.UTC(2004, 6, 9, 0, 0, 0));
 
     jest.useFakeTimers();
     jest.setSystemTime(frozenDate);
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [AppService, { provide: PrismaService, useValue: prismaMock }],
     }).compile();
 
     appController = app.get<AppController>(AppController);
@@ -29,7 +36,7 @@ describe('AppController', () => {
       expect(appController.getStatus()).toEqual({
         status: 'ok',
         version: '1',
-        timestamp: '2011-01-01T00:00:00.000Z',
+        timestamp: '2004-07-09T00:00:00.000Z',
       });
     });
   });
@@ -38,6 +45,17 @@ describe('AppController', () => {
     it('should return pong', () => {
       expect(appController.pong({ message: 'ping' })).toEqual({
         message: 'pong',
+      });
+    });
+  });
+
+  describe('health', () => {
+    it('should be all ok', async () => {
+      prismaMock.$queryRaw.mockResolvedValue([{ ready: 1 }]);
+
+      await expect(appController.health()).resolves.toEqual({
+        up: true,
+        databaseIsReady: true,
       });
     });
   });

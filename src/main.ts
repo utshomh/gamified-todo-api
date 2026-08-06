@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
 import { AppConfigService } from './config/app-config.service';
+
 import { AppExceptionFilter } from './common/errors/app-exception.filter';
 
 async function bootstrap() {
