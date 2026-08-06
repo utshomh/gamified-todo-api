@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { AppConfigService } from './config/app-config.service';
 
+import { LoggerInterceptor } from './common/logger/logger.interceptor';
 import { AppExceptionFilter } from './common/errors/app-exception.filter';
 import { ApiSuccessInterceptor } from './common/responses/api-success.interceptor';
 
@@ -27,6 +28,7 @@ async function bootstrap() {
   );
 
   // Interceptors
+  app.useGlobalInterceptors(new LoggerInterceptor());
   app.useGlobalInterceptors(new ApiSuccessInterceptor());
 
   // Exception Filters
