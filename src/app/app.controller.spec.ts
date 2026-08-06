@@ -34,9 +34,9 @@ describe('AppController', () => {
   describe('status', () => {
     it('should return server status', () => {
       expect(appController.getStatus()).toEqual({
+        service: 'gamified-todo-api',
         status: 'ok',
         version: '1',
-        timestamp: '2004-07-09T00:00:00.000Z',
       });
     });
   });

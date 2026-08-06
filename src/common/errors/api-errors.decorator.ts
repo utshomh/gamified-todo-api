@@ -31,7 +31,7 @@ function schemaForError(code: ErrorCode) {
         type: 'object',
         required: ['statusCode', 'code', 'message'],
         properties: {
-          ok: {
+          success: {
             type: 'boolean',
             example: false,
           },
@@ -82,12 +82,12 @@ export function ApiErrors<const Codes extends readonly ErrorCode[]>(
                   {
                     summary: genericCodeForStatus(definition.status),
                     value: {
-                      ok: false,
+                      success: false,
                       statusCode: definition.status,
                       code,
                       message: definition.message,
                       timestamp: '2004-07-09T00:00:00.000Z',
-                      path: '/api/v1/example',
+                      path: '/api/v1/foo-bar',
                       details: {},
                     },
                   },

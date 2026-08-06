@@ -1,12 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import {
-  ApiCreatedResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiErrors } from '../common/errors/api-errors.decorator';
+import { ApiSuccessResponse } from '../common/responses/api-success.decorator';
 
 import { AppService } from './app.service';
 import { StatusResponseDto } from './dto/status.dto';
@@ -25,10 +21,7 @@ export class AppController {
     description:
       'Returns the current health and version information of the API.',
   })
-  @ApiOkResponse({
-    description: 'Returns application status',
-    type: StatusResponseDto,
-  })
+  @ApiSuccessResponse(StatusResponseDto, 'Returns application status')
   getStatus(): StatusResponseDto {
     return this.appService.getStatus();
   }
@@ -39,10 +32,7 @@ export class AppController {
     summary: 'Ping Server',
     description: 'Returns the string `pong`',
   })
-  @ApiCreatedResponse({
-    description: 'Returns the string `pong`',
-    type: PongResponseDto,
-  })
+  @ApiSuccessResponse(PongResponseDto, 'Returns the string `pong`')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pong(@Body() _dto: PingRequestDto): PongResponseDto {
     return this.appService.pong();
@@ -53,10 +43,7 @@ export class AppController {
     summary: 'Server Health',
     description: 'Checks and returns server health information',
   })
-  @ApiOkResponse({
-    description: 'Returns server health',
-    type: HealthResponseDto,
-  })
+  @ApiSuccessResponse(HealthResponseDto, 'Returns server health')
   health(): Promise<HealthResponseDto> {
     return this.appService.health();
   }

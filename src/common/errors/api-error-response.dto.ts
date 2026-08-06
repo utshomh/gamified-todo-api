@@ -4,7 +4,7 @@ import { ERROR_CATALOG, type ErrorCode } from './error-catalog';
 
 export class ApiErrorResponseDto {
   @ApiProperty({ example: false })
-  ok!: false;
+  success!: false;
 
   @ApiProperty({ example: 404 })
   statusCode!: number;
@@ -30,6 +30,6 @@ export class ApiErrorResponseDto {
   })
   timestamp!: string;
 
-  @ApiProperty({ example: '/api/v1/example/1' })
+  @ApiProperty({ example: '/api/v1/foo-bar' })
   path!: string;
 }

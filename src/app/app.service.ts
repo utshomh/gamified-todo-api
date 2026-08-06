@@ -11,7 +11,7 @@ export class AppService {
   constructor(private readonly prisma: PrismaService) {}
 
   getStatus(): StatusResponseDto {
-    return { status: 'ok', version: '1', timestamp: new Date().toISOString() };
+    return { service: 'gamified-todo-api', status: 'ok', version: '1' };
   }
 
   pong(): PongResponseDto {

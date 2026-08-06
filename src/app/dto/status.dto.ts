@@ -2,6 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class StatusResponseDto {
   @ApiProperty({
+    example: 'foo-bar-api',
+    description: 'Current service name',
+  })
+  service!: string;
+
+  @ApiProperty({
     example: 'ok',
     description: 'Current server status',
   })
@@ -12,10 +18,4 @@ export class StatusResponseDto {
     description: 'API version',
   })
   version!: string;
-
-  @ApiProperty({
-    example: '2004-07-09T17:50:00.000Z',
-    description: 'Current server time',
-  })
-  timestamp!: string;
 }
