@@ -26,7 +26,7 @@ export class AppController {
     return this.appService.getStatus();
   }
 
-  @ApiErrors('VALIDATION_ERROR')
+  @ApiErrors('BAD_REQUEST')
   @Post('/ping')
   @ApiOperation({
     summary: 'Ping Server',

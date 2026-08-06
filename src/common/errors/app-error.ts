@@ -5,8 +5,8 @@ export class AppError<C extends ErrorCode> extends Error {
 
   constructor(
     readonly code: C,
-    readonly details?: Record<string, unknown>,
     message: string = ERROR_CATALOG[code].message,
+    readonly details?: Record<string, unknown>,
   ) {
     super(message);
 

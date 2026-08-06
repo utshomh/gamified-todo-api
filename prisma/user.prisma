@@ -8,7 +8,7 @@ model User {
     updatedAt    DateTime @updatedAt
 
     todos      Todo[]
-    // sessions      RefreshSession[]
+    sessions   AuthSession[]
     progress   UserProgress?
     activities DailyActivity[]
     xpEntries  XpTransaction[]

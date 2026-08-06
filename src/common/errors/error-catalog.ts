@@ -7,7 +7,7 @@ type ErrorDefinition = {
 };
 
 export const ERROR_CATALOG = {
-  VALIDATION_ERROR: {
+  BAD_REQUEST: {
     status: HttpStatus.BAD_REQUEST,
     message: 'Request validation failed',
     description: 'The body, query, or route parameters are invalid.',

@@ -23,6 +23,14 @@ export class AppConfigService {
     return this.config.get('JWT_REFRESH_SECRET', { infer: true });
   }
 
+  get jwtAccessTtl() {
+    return this.config.get('JWT_ACCESS_TTL', { infer: true });
+  }
+
+  get jwtRefreshTtl() {
+    return this.config.get('JWT_REFRESH_TTL', { infer: true });
+  }
+
   get redisHost() {
     return this.config.get('REDIS_HOST', { infer: true });
   }

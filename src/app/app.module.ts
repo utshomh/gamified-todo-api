@@ -1,16 +1,25 @@
-import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+
+import { RequestLoggerMiddleware } from '../common/middlewares/logger.middleware';
 
 import { AppConfigModule } from '../config/app-config.module';
 
 import { PrismaModule } from '../prisma/prisma.module';
-import { PrismaService } from '../prisma/prisma.service';
+
+import { AuthModule } from '../modules/auth/auth.module';
+import { UserModule } from '../modules/user/user.module';
 
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
 @Module({
-  imports: [AppConfigModule, PrismaModule],
+  imports: [AppConfigModule, PrismaModule, JwtModule, AuthModule, UserModule],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware).forRoutes('*path');
+  }
+}
