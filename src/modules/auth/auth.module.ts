@@ -5,11 +5,11 @@ import { AppConfigService } from '../../config/app-config.service';
 
 import { UserModule } from '../user/user.module';
 
+import { AuthController } from './auth.controller';
+
 import { AuthService } from './auth.service';
 import { JwtTokenService } from './jwt/jwt-token.service';
-import { AuthController } from './auth.controller';
 import { AuthSessionService } from './auth-session.service';
-import { PrismaModule } from '../../prisma/prisma.module';
 
 @Module({
   imports: [
@@ -20,7 +20,6 @@ import { PrismaModule } from '../../prisma/prisma.module';
         secret: appConfig.jwtAccessSecret,
       }),
     }),
-    PrismaModule,
     UserModule,
   ],
   controllers: [AuthController],
