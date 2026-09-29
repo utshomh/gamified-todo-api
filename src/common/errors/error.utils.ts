@@ -6,7 +6,7 @@ import { ErrorCode } from './error-catalog';
 export function genericCodeForStatus(status: number): ErrorCode {
   switch (status) {
     case HttpStatus.BAD_REQUEST:
-      return 'VALIDATION_ERROR';
+      return 'BAD_REQUEST';
     case HttpStatus.UNAUTHORIZED:
       return 'UNAUTHORIZED';
     case HttpStatus.FORBIDDEN:

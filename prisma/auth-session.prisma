@@ -1,0 +1,17 @@
+model AuthSession {
+    id           String    @id @default(cuid())
+    userId       String
+    tokenHash    String
+    expiresAt    DateTime
+    revokedAt    DateTime?
+    replacedById String?
+    userAgent    String?
+    ipAddress    String?
+    createdAt    DateTime  @default(now())
+    lastUsedAt   DateTime?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, revokedAt])
+    @@index([expiresAt])
+}
