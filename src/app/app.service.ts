@@ -28,7 +28,7 @@ export class AppService {
       };
     } catch {
       return {
-        up: false,
+        up: true,
         databaseIsReady: false,
       };
     }

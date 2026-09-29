@@ -10,13 +10,33 @@ export class AuthSessionService {
     private readonly appConfig: AppConfigService,
   ) {}
 
-  createSession(userId: string, tokenHash: string) {
+  createSession(data: {
+    sessionId: string;
+    userId: string;
+    tokenHash: string;
+  }) {
     return this.prisma.authSession.create({
       data: {
-        userId,
-        tokenHash,
+        id: data.sessionId,
+        userId: data.userId,
+        tokenHash: data.tokenHash,
         expiresAt: new Date(Date.now() + this.appConfig.jwtRefreshTtl),
       },
+    });
+  }
+
+  findSessionById(id: string) {
+    return this.prisma.authSession.findFirst({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async revokeSession(id: string) {
+    await this.prisma.authSession.update({
+      where: { id },
+      data: { revokedAt: new Date(Date.now()) },
     });
   }
 }

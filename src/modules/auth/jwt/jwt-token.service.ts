@@ -34,4 +34,8 @@ export class JwtTokenService {
   async verifyAccessToken(token: string) {
     return this.jwtService.verifyAsync<AccessTokenPayload>(token);
   }
+
+  async verifyRefreshToken(token: string) {
+    return this.jwtService.verifyAsync<RefreshTokenPayload>(token);
+  }
 }

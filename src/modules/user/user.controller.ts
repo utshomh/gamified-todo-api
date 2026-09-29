@@ -12,7 +12,7 @@ import { AuthTokenGuard } from '../auth/access-token.guard';
 import { UserService } from './user.service';
 
 import { MeResponseDto } from './dto/me.dto';
-import { AuthPayload } from '../auth/auth-payload.decorator';
+import { AccessToken } from '../auth/access-token.decorator';
 
 @ApiTags('User')
 @ApiErrors('INTERNAL_ERROR')
@@ -22,14 +22,14 @@ export class UserController {
 
   @ApiBearerAuth('access-token')
   @UseGuards(AuthTokenGuard)
-  @ApiErrors('NOT_FOUND')
+  @ApiErrors('UNAUTHORIZED')
   @Get('/me')
   @ApiOperation({
     summary: 'Get Authenticated User',
     description: 'Returns the currently authenticated user',
   })
   @ApiSuccessResponse(MeResponseDto, 'Returns the currently authenticated user')
-  me(@AuthPayload() payload: AccessTokenPayload): Promise<MeResponseDto> {
+  me(@AccessToken() payload: AccessTokenPayload): Promise<MeResponseDto> {
     return this.userService.me(payload.userId);
   }
 }

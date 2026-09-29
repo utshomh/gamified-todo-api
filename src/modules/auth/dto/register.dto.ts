@@ -13,21 +13,21 @@ export class RegisterDto {
   @ApiProperty({
     example: 'Example',
   })
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString()
   @Length(3, 18)
   @Matches(/^[a-zA-Z0-9_]+$/, {
     message: 'Display name may only contain letters, numbers, and underscores.',
   })
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   displayName!: string;
 
   @ApiProperty({
     example: 'example@email.com',
   })
+  @IsEmail()
   @Transform(({ value }) =>
     typeof value === 'string' ? value.trim().toLowerCase() : value,
   )
-  @IsEmail()
   email!: string;
 
   @ApiProperty({

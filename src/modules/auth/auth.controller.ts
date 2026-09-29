@@ -7,6 +7,7 @@ import { ApiSuccessResponse } from '../../common/responses/api-success.decorator
 import { AuthService } from './auth.service';
 import { RegisterDto, RegisterResponseDto } from './dto/register.dto';
 import { LoginDto, LoginResponseDto } from './dto/login.dto';
+import { RotateTokenDto, RotateTokenResponseDto } from './dto/rotate-token.dto';
 
 @ApiTags('Authentication')
 @ApiErrors('INTERNAL_ERROR')
@@ -34,5 +35,19 @@ export class AuthController {
   @ApiSuccessResponse(LoginResponseDto, 'Returns the Access and Refresh Token')
   login(@Body() dto: LoginDto): Promise<LoginResponseDto> {
     return this.authService.login(dto);
+  }
+
+  @ApiErrors('BAD_REQUEST', 'UNAUTHORIZED')
+  @Post('/rotate-token')
+  @ApiOperation({
+    summary: 'Rotate/Refresh Access Token',
+    description: 'Rotates old Access Token with a new one',
+  })
+  @ApiSuccessResponse(
+    RotateTokenResponseDto,
+    'Returns the Access and Refresh Token',
+  )
+  rotateToken(@Body() dto: RotateTokenDto): Promise<RotateTokenResponseDto> {
+    return this.authService.rotateToken(dto);
   }
 }

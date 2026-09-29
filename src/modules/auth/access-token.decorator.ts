@@ -5,7 +5,7 @@ import { AccessTokenPayload } from './auth.types';
 
 type AuthenticatedRequest = Request & { authPayload: AccessTokenPayload };
 
-export const AuthPayload = createParamDecorator(
+export const AccessToken = createParamDecorator(
   (_data: unknown, context: ExecutionContext): AccessTokenPayload =>
     context.switchToHttp().getRequest<AuthenticatedRequest>().authPayload,
 );

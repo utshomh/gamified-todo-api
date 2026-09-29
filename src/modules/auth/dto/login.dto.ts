@@ -7,10 +7,10 @@ export class LoginDto {
   @ApiProperty({
     example: 'example@email.com',
   })
+  @IsEmail()
   @Transform(({ value }) =>
     typeof value === 'string' ? value.trim().toLowerCase() : value,
   )
-  @IsEmail()
   email!: string;
 
   @ApiProperty({
