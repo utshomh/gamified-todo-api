@@ -7,6 +7,10 @@ import { Env } from './env.schema';
 export class AppConfigService {
   constructor(private readonly config: ConfigService<Env, true>) {}
 
+  get appUrl() {
+    return this.config.get('APP_BASE_URL', { infer: true });
+  }
+
   get port() {
     return this.config.get('PORT', { infer: true });
   }

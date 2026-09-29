@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 
 import { AppModule } from './app/app.module';
 import { AppConfigService } from './config/app-config.service';
@@ -11,6 +11,8 @@ import { ApiSuccessInterceptor } from './common/responses/api-success.intercepto
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const logger = new Logger('Bootstrap');
 
   const appConfig = app.get(AppConfigService);
 
@@ -52,6 +54,9 @@ async function bootstrap() {
 
   // Start the application
   await app.listen(appConfig.port);
+
+  logger.log(`Starting the server at: ${appConfig.appUrl}`);
+  logger.log(`API doc is available at: ${appConfig.appUrl}/docs`);
 }
 
 void bootstrap();
