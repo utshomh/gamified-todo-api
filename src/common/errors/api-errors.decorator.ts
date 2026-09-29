@@ -45,7 +45,7 @@ function schemaForError(code: ErrorCode) {
           },
           message: {
             type: 'string',
-            example: definition.status,
+            example: definition.message,
           },
           details: {},
         },
