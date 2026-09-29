@@ -1,0 +1,16 @@
+model User {
+    id           String   @id @default(cuid())
+    email        String   @unique
+    passwordHash String
+    displayName  String
+    timezone     String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    todos      Todo[]
+    // sessions      RefreshSession[]
+    progress   UserProgress?
+    activities DailyActivity[]
+    xpEntries  XpTransaction[]
+    // notifications Notification[]
+}
