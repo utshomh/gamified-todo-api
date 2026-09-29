@@ -5,6 +5,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { AppConfigService } from './config/app-config.service';
 
+import { AppExceptionFilter } from './common/errors/app-exception.filter';
+import { ApiSuccessInterceptor } from './common/responses/api-success.interceptor';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -22,6 +25,12 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  // Interceptors
+  app.useGlobalInterceptors(new ApiSuccessInterceptor());
+
+  // Exception Filters
+  app.useGlobalFilters(new AppExceptionFilter());
 
   // Build OpenAPI interactive docs with Swagger
   const config = new DocumentBuilder()
