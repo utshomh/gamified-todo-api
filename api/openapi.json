@@ -45,6 +45,15 @@
             }
           },
           "500": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The server encountered an unexpected condition.",
             "content": {
               "application/json": {
@@ -82,8 +91,7 @@
                             "message": {
                               "type": "string",
                               "example": "An unexpected error occurred"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -99,8 +107,7 @@
                       "code": "INTERNAL_ERROR",
                       "message": "An unexpected error occurred",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -168,6 +175,15 @@
             }
           },
           "400": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The body, query, or route parameters are invalid.",
             "content": {
               "application/json": {
@@ -176,7 +192,7 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                          "$ref": "#/components/schemas/ApiBadRequestErrorResponseDto"
                         },
                         {
                           "type": "object",
@@ -205,8 +221,7 @@
                             "message": {
                               "type": "string",
                               "example": "Request validation failed"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -223,7 +238,11 @@
                       "message": "Request validation failed",
                       "timestamp": "2004-07-09T00:00:00.000Z",
                       "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "details": {
+                        "errors": [
+                          "message must be equal to ping"
+                        ]
+                      }
                     }
                   }
                 }
@@ -231,6 +250,15 @@
             }
           },
           "500": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The server encountered an unexpected condition.",
             "content": {
               "application/json": {
@@ -268,8 +296,7 @@
                             "message": {
                               "type": "string",
                               "example": "An unexpected error occurred"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -285,8 +312,7 @@
                       "code": "INTERNAL_ERROR",
                       "message": "An unexpected error occurred",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -344,6 +370,15 @@
             }
           },
           "500": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The server encountered an unexpected condition.",
             "content": {
               "application/json": {
@@ -381,8 +416,7 @@
                             "message": {
                               "type": "string",
                               "example": "An unexpected error occurred"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -398,8 +432,7 @@
                       "code": "INTERNAL_ERROR",
                       "message": "An unexpected error occurred",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -467,6 +500,15 @@
             }
           },
           "400": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The body, query, or route parameters are invalid.",
             "content": {
               "application/json": {
@@ -475,7 +517,7 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                          "$ref": "#/components/schemas/ApiBadRequestErrorResponseDto"
                         },
                         {
                           "type": "object",
@@ -504,8 +546,7 @@
                             "message": {
                               "type": "string",
                               "example": "Request validation failed"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -522,7 +563,11 @@
                       "message": "Request validation failed",
                       "timestamp": "2004-07-09T00:00:00.000Z",
                       "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "details": {
+                        "errors": [
+                          "message must be equal to ping"
+                        ]
+                      }
                     }
                   }
                 }
@@ -530,6 +575,15 @@
             }
           },
           "409": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The requested operation cannot be performed.",
             "content": {
               "application/json": {
@@ -567,8 +621,7 @@
                             "message": {
                               "type": "string",
                               "example": "The request conflicts with the current state"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -584,8 +637,7 @@
                       "code": "CONFLICT",
                       "message": "The request conflicts with the current state",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -593,6 +645,15 @@
             }
           },
           "500": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The server encountered an unexpected condition.",
             "content": {
               "application/json": {
@@ -630,8 +691,7 @@
                             "message": {
                               "type": "string",
                               "example": "An unexpected error occurred"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -647,8 +707,7 @@
                       "code": "INTERNAL_ERROR",
                       "message": "An unexpected error occurred",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -716,6 +775,15 @@
             }
           },
           "400": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The body, query, or route parameters are invalid.",
             "content": {
               "application/json": {
@@ -724,7 +792,7 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                          "$ref": "#/components/schemas/ApiBadRequestErrorResponseDto"
                         },
                         {
                           "type": "object",
@@ -753,8 +821,7 @@
                             "message": {
                               "type": "string",
                               "example": "Request validation failed"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -771,7 +838,11 @@
                       "message": "Request validation failed",
                       "timestamp": "2004-07-09T00:00:00.000Z",
                       "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "details": {
+                        "errors": [
+                          "message must be equal to ping"
+                        ]
+                      }
                     }
                   }
                 }
@@ -779,6 +850,15 @@
             }
           },
           "401": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The access token is missing or invalid.",
             "content": {
               "application/json": {
@@ -816,8 +896,7 @@
                             "message": {
                               "type": "string",
                               "example": "Authentication is required"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -833,8 +912,7 @@
                       "code": "UNAUTHORIZED",
                       "message": "Authentication is required",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -842,6 +920,15 @@
             }
           },
           "500": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The server encountered an unexpected condition.",
             "content": {
               "application/json": {
@@ -879,8 +966,7 @@
                             "message": {
                               "type": "string",
                               "example": "An unexpected error occurred"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -896,8 +982,7 @@
                       "code": "INTERNAL_ERROR",
                       "message": "An unexpected error occurred",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -965,6 +1050,15 @@
             }
           },
           "400": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The body, query, or route parameters are invalid.",
             "content": {
               "application/json": {
@@ -973,7 +1067,7 @@
                     {
                       "allOf": [
                         {
-                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                          "$ref": "#/components/schemas/ApiBadRequestErrorResponseDto"
                         },
                         {
                           "type": "object",
@@ -1002,8 +1096,7 @@
                             "message": {
                               "type": "string",
                               "example": "Request validation failed"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -1020,7 +1113,11 @@
                       "message": "Request validation failed",
                       "timestamp": "2004-07-09T00:00:00.000Z",
                       "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "details": {
+                        "errors": [
+                          "message must be equal to ping"
+                        ]
+                      }
                     }
                   }
                 }
@@ -1028,6 +1125,15 @@
             }
           },
           "401": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The access token is missing or invalid.",
             "content": {
               "application/json": {
@@ -1065,8 +1171,7 @@
                             "message": {
                               "type": "string",
                               "example": "Authentication is required"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -1082,8 +1187,7 @@
                       "code": "UNAUTHORIZED",
                       "message": "Authentication is required",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -1091,6 +1195,15 @@
             }
           },
           "500": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The server encountered an unexpected condition.",
             "content": {
               "application/json": {
@@ -1128,8 +1241,7 @@
                             "message": {
                               "type": "string",
                               "example": "An unexpected error occurred"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -1145,8 +1257,7 @@
                       "code": "INTERNAL_ERROR",
                       "message": "An unexpected error occurred",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -1204,6 +1315,15 @@
             }
           },
           "401": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The access token is missing or invalid.",
             "content": {
               "application/json": {
@@ -1241,8 +1361,7 @@
                             "message": {
                               "type": "string",
                               "example": "Authentication is required"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -1258,8 +1377,7 @@
                       "code": "UNAUTHORIZED",
                       "message": "Authentication is required",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -1267,6 +1385,15 @@
             }
           },
           "404": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The requested resource does not exist.",
             "content": {
               "application/json": {
@@ -1304,8 +1431,7 @@
                             "message": {
                               "type": "string",
                               "example": "Resource not found"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -1321,8 +1447,7 @@
                       "code": "NOT_FOUND",
                       "message": "Resource not found",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -1330,6 +1455,15 @@
             }
           },
           "500": {
+            "headers": {
+              "X-Request-ID": {
+                "description": "Request identifier shared with the server logs.",
+                "schema": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            },
             "description": "The server encountered an unexpected condition.",
             "content": {
               "application/json": {
@@ -1367,8 +1501,7 @@
                             "message": {
                               "type": "string",
                               "example": "An unexpected error occurred"
-                            },
-                            "details": {}
+                            }
                           }
                         }
                       ]
@@ -1384,8 +1517,7 @@
                       "code": "INTERNAL_ERROR",
                       "message": "An unexpected error occurred",
                       "timestamp": "2004-07-09T00:00:00.000Z",
-                      "path": "/api/v1/foo-bar",
-                      "details": {}
+                      "path": "/api/v1/foo-bar"
                     }
                   }
                 }
@@ -1452,10 +1584,6 @@
             "type": "string",
             "example": "Resource not found"
           },
-          "details": {
-            "type": "object",
-            "additionalProperties": true
-          },
           "timestamp": {
             "type": "string",
             "format": "date-time",
@@ -1473,6 +1601,76 @@
           "message",
           "timestamp",
           "path"
+        ]
+      },
+      "ValidationErrorDetailsDto": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "example": [
+              "message must be equal to ping"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "errors"
+        ]
+      },
+      "ApiBadRequestErrorResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              false
+            ],
+            "example": false
+          },
+          "statusCode": {
+            "type": "number",
+            "default": 400,
+            "example": 400,
+            "enum": [
+              400
+            ]
+          },
+          "code": {
+            "enum": [
+              "BAD_REQUEST"
+            ],
+            "type": "string",
+            "default": "BAD_REQUEST",
+            "example": "BAD_REQUEST"
+          },
+          "message": {
+            "type": "string",
+            "example": "Resource not found"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-06T00:00:00.000Z"
+          },
+          "path": {
+            "type": "string",
+            "example": "/api/v1/foo-bar"
+          },
+          "details": {
+            "$ref": "#/components/schemas/ValidationErrorDetailsDto"
+          }
+        },
+        "required": [
+          "success",
+          "statusCode",
+          "code",
+          "message",
+          "timestamp",
+          "path",
+          "details"
         ]
       },
       "StatusResponseDto": {

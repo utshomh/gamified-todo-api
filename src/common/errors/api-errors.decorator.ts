@@ -1,7 +1,11 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 
-import { ApiErrorResponseDto } from './api-error-response.dto';
+import {
+  ApiErrorResponseDto,
+  ApiBadRequestErrorResponseDto,
+  ValidationErrorDetailsDto,
+} from './api-error-response.dto';
 import { ERROR_CATALOG, ErrorCode } from './error-catalog';
 import { genericCodeForStatus } from './error.utils';
 
@@ -25,7 +29,12 @@ function schemaForError(code: ErrorCode) {
   return {
     allOf: [
       {
-        $ref: getSchemaPath(ApiErrorResponseDto),
+        $ref: getSchemaPath(
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          code === 'BAD_REQUEST'
+            ? ApiBadRequestErrorResponseDto
+            : ApiErrorResponseDto,
+        ),
       },
       {
         type: 'object',
@@ -47,7 +56,6 @@ function schemaForError(code: ErrorCode) {
             type: 'string',
             example: definition.message,
           },
-          details: {},
         },
       },
     ],
@@ -63,6 +71,12 @@ export function ApiErrors<const Codes extends readonly ErrorCode[]>(
     ([status, statusCodes]) =>
       ApiResponse({
         status,
+        headers: {
+          'X-Request-ID': {
+            description: 'Request identifier shared with the server logs.',
+            schema: { type: 'string', format: 'uuid' },
+          },
+        },
         description: statusCodes
           .map((code) => ERROR_CATALOG[code].description)
           .join(' / '),
@@ -88,7 +102,13 @@ export function ApiErrors<const Codes extends readonly ErrorCode[]>(
                       message: definition.message,
                       timestamp: '2004-07-09T00:00:00.000Z',
                       path: '/api/v1/foo-bar',
-                      details: {},
+                      ...(code === 'BAD_REQUEST'
+                        ? {
+                            details: {
+                              errors: ['message must be equal to ping'],
+                            },
+                          }
+                        : {}),
                     },
                   },
                 ];
@@ -100,7 +120,11 @@ export function ApiErrors<const Codes extends readonly ErrorCode[]>(
   );
 
   return applyDecorators(
-    ApiExtraModels(ApiErrorResponseDto),
+    ApiExtraModels(
+      ApiErrorResponseDto,
+      ApiBadRequestErrorResponseDto,
+      ValidationErrorDetailsDto,
+    ),
     ...responseDecorators,
   );
 }

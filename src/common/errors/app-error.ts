@@ -1,3 +1,4 @@
+import type { ErrorDetails } from './api-error-response.dto';
 import { ERROR_CATALOG, type ErrorCode } from './error-catalog';
 
 export class AppError<C extends ErrorCode> extends Error {
@@ -6,7 +7,7 @@ export class AppError<C extends ErrorCode> extends Error {
   constructor(
     readonly code: C,
     message: string = ERROR_CATALOG[code].message,
-    readonly details?: Record<string, unknown>,
+    readonly details?: ErrorDetails<NoInfer<C>>,
   ) {
     super(message);
 

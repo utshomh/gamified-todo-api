@@ -5,8 +5,13 @@ import type { RegisterDto } from '../src/modules/auth/dto/register.dto';
 import type { LoginDto } from '../src/modules/auth/dto/login.dto';
 import type { RotateTokenDto } from '../src/modules/auth/dto/rotate-token.dto';
 import type { PingRequestDto } from '../src/app/dto/ping.dto';
-import type { ApiErrorResponseDto } from '../src/common/errors/api-error-response.dto';
+import type {
+  ApiErrorResponseDto,
+  ApiBadRequestErrorResponseDto,
+  ValidationErrorDetailsDto,
+} from '../src/common/errors/api-error-response.dto';
 import type { components, paths } from './schema';
+import { AppError } from '../src/common/errors/app-error';
 
 type Assert<T extends true> = T;
 
@@ -23,6 +28,18 @@ export type ContractChecks = [
   Assert<Equal<PingRequestDto, components['schemas']['PingRequestDto']>>,
   Assert<
     Equal<ApiErrorResponseDto, components['schemas']['ApiErrorResponseDto']>
+  >,
+  Assert<
+    Equal<
+      ApiBadRequestErrorResponseDto,
+      components['schemas']['ApiBadRequestErrorResponseDto']
+    >
+  >,
+  Assert<
+    Equal<
+      ValidationErrorDetailsDto,
+      components['schemas']['ValidationErrorDetailsDto']
+    >
   >,
   Assert<
     Equal<
@@ -67,3 +84,28 @@ export type ContractChecks = [
     >
   >,
 ];
+
+type PingError = paths['/api/v1/app/ping']['post']['responses'][
+  400 | 500]['content']['application/json'];
+
+// These accesses must stay type safe for consumers of the generated client.
+export function validationMessages(error: PingError): string[] {
+  if (error.code === 'BAD_REQUEST') {
+    const errors: string[] = error.details.errors;
+    // @ts-expect-error Validation errors contain strings, not arbitrary objects.
+    const invalid: number[] = error.details.errors;
+    void invalid;
+    return errors;
+  }
+  // @ts-expect-error Internal errors do not expose a details payload.
+  void error.details;
+  return [];
+}
+
+// This function is only compiled; it is never executed.
+export function checkApplicationErrorDetails() {
+  // @ts-expect-error Validation details must contain a string array.
+  new AppError('BAD_REQUEST', 'Invalid input', { errors: [123] });
+  // @ts-expect-error Internal errors cannot carry public diagnostic details.
+  new AppError('INTERNAL_ERROR', 'Failure', { stack: 'private' });
+}

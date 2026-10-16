@@ -163,9 +163,6 @@ export interface components {
             code: "BAD_REQUEST" | "UNAUTHORIZED" | "FORBIDDEN" | "NOT_FOUND" | "CONFLICT" | "INTERNAL_ERROR";
             /** @example Resource not found */
             message: string;
-            details?: {
-                [key: string]: unknown;
-            };
             /**
              * Format: date-time
              * @example 2026-08-06T00:00:00.000Z
@@ -173,6 +170,43 @@ export interface components {
             timestamp: string;
             /** @example /api/v1/foo-bar */
             path: string;
+        };
+        ValidationErrorDetailsDto: {
+            /**
+             * @example [
+             *       "message must be equal to ping"
+             *     ]
+             */
+            errors: string[];
+        };
+        ApiBadRequestErrorResponseDto: {
+            /**
+             * @example false
+             * @enum {boolean}
+             */
+            success: false;
+            /**
+             * @default 400
+             * @example 400
+             * @enum {number}
+             */
+            statusCode: 400;
+            /**
+             * @default BAD_REQUEST
+             * @example BAD_REQUEST
+             * @enum {string}
+             */
+            code: "BAD_REQUEST";
+            /** @example Resource not found */
+            message: string;
+            /**
+             * Format: date-time
+             * @example 2026-08-06T00:00:00.000Z
+             */
+            timestamp: string;
+            /** @example /api/v1/foo-bar */
+            path: string;
+            details: components["schemas"]["ValidationErrorDetailsDto"];
         };
         StatusResponseDto: {
             /**
@@ -327,6 +361,8 @@ export interface operations {
             /** @description The server encountered an unexpected condition. */
             500: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -339,7 +375,6 @@ export interface operations {
                         code: "INTERNAL_ERROR";
                         /** @example An unexpected error occurred */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
@@ -384,10 +419,12 @@ export interface operations {
             /** @description The body, query, or route parameters are invalid. */
             400: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ApiErrorResponseDto"] & {
+                    "application/json": components["schemas"]["ApiBadRequestErrorResponseDto"] & {
                         /** @example false */
                         success?: boolean;
                         /** @enum {integer} */
@@ -396,13 +433,14 @@ export interface operations {
                         code: "BAD_REQUEST";
                         /** @example Request validation failed */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The server encountered an unexpected condition. */
             500: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -415,7 +453,6 @@ export interface operations {
                         code: "INTERNAL_ERROR";
                         /** @example An unexpected error occurred */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
@@ -456,6 +493,8 @@ export interface operations {
             /** @description The server encountered an unexpected condition. */
             500: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -468,7 +507,6 @@ export interface operations {
                         code: "INTERNAL_ERROR";
                         /** @example An unexpected error occurred */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
@@ -513,10 +551,12 @@ export interface operations {
             /** @description The body, query, or route parameters are invalid. */
             400: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ApiErrorResponseDto"] & {
+                    "application/json": components["schemas"]["ApiBadRequestErrorResponseDto"] & {
                         /** @example false */
                         success?: boolean;
                         /** @enum {integer} */
@@ -525,13 +565,14 @@ export interface operations {
                         code: "BAD_REQUEST";
                         /** @example Request validation failed */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The requested operation cannot be performed. */
             409: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -544,13 +585,14 @@ export interface operations {
                         code: "CONFLICT";
                         /** @example The request conflicts with the current state */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The server encountered an unexpected condition. */
             500: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -563,7 +605,6 @@ export interface operations {
                         code: "INTERNAL_ERROR";
                         /** @example An unexpected error occurred */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
@@ -608,10 +649,12 @@ export interface operations {
             /** @description The body, query, or route parameters are invalid. */
             400: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ApiErrorResponseDto"] & {
+                    "application/json": components["schemas"]["ApiBadRequestErrorResponseDto"] & {
                         /** @example false */
                         success?: boolean;
                         /** @enum {integer} */
@@ -620,13 +663,14 @@ export interface operations {
                         code: "BAD_REQUEST";
                         /** @example Request validation failed */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The access token is missing or invalid. */
             401: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -639,13 +683,14 @@ export interface operations {
                         code: "UNAUTHORIZED";
                         /** @example Authentication is required */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The server encountered an unexpected condition. */
             500: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -658,7 +703,6 @@ export interface operations {
                         code: "INTERNAL_ERROR";
                         /** @example An unexpected error occurred */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
@@ -703,10 +747,12 @@ export interface operations {
             /** @description The body, query, or route parameters are invalid. */
             400: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ApiErrorResponseDto"] & {
+                    "application/json": components["schemas"]["ApiBadRequestErrorResponseDto"] & {
                         /** @example false */
                         success?: boolean;
                         /** @enum {integer} */
@@ -715,13 +761,14 @@ export interface operations {
                         code: "BAD_REQUEST";
                         /** @example Request validation failed */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The access token is missing or invalid. */
             401: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -734,13 +781,14 @@ export interface operations {
                         code: "UNAUTHORIZED";
                         /** @example Authentication is required */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The server encountered an unexpected condition. */
             500: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -753,7 +801,6 @@ export interface operations {
                         code: "INTERNAL_ERROR";
                         /** @example An unexpected error occurred */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
@@ -794,6 +841,8 @@ export interface operations {
             /** @description The access token is missing or invalid. */
             401: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -806,13 +855,14 @@ export interface operations {
                         code: "UNAUTHORIZED";
                         /** @example Authentication is required */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The requested resource does not exist. */
             404: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -825,13 +875,14 @@ export interface operations {
                         code: "NOT_FOUND";
                         /** @example Resource not found */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };
             /** @description The server encountered an unexpected condition. */
             500: {
                 headers: {
+                    /** @description Request identifier shared with the server logs. */
+                    "X-Request-ID"?: string;
                     [name: string]: unknown;
                 };
                 content: {
@@ -844,7 +895,6 @@ export interface operations {
                         code: "INTERNAL_ERROR";
                         /** @example An unexpected error occurred */
                         message: string;
-                        details?: unknown;
                     };
                 };
             };

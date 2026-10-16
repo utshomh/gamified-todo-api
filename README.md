@@ -27,7 +27,17 @@ Use `Authorization: Bearer <accessToken>` for `/api/v1/user/me`. Both token type
 
 Previously issued tokens lack the required token type and return 401 after this update; users must log in again. Session IDs are opaque UUIDs; user IDs retain their database CUID format.
 
-Public user responses contain only `id`, `displayName`, `email`, and `timezone`. Successes use `{ success: true, data, timestamp, path }`; errors use `{ success: false, statusCode, code, message, timestamp, path }` with optional `details`.
+Public user responses contain only `id`, `displayName`, `email`, and `timezone`. Successes use `{ success: true, data, timestamp, path }`; errors use `{ success: false, statusCode, code, message, timestamp, path }`.
+
+Every `BAD_REQUEST` (400) response also contains the required field `details: { errors: string[] }`, including malformed JSON and explicit bad-request exceptions. Other error codes do not expose a details payload. The generated client narrows this shape by `code`:
+
+```ts
+if (error?.code === 'BAD_REQUEST') {
+  error.details.errors.forEach((message) => console.log(message));
+}
+```
+
+Responses include an `X-Request-ID` header. Unexpected server errors log the same request ID, HTTP method, path, status, exception stack, and nested cause. Request bodies, authorization headers, and URL query parameters are not included in request logging. A 500 response keeps its generic public message; internal error messages and diagnostics stay in server logs.
 
 ## API contracts and typed client
 
