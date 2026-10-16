@@ -1,18 +1,18 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+import { AccessToken } from '../auth/access-token.decorator';
 import { ApiErrors } from '../../common/errors/api-errors.decorator';
-
-import { ApiSuccessResponse } from '../../common/responses/api-success.decorator';
 
 import type { AccessTokenPayload } from '../auth/auth.types';
 
 import { AuthTokenGuard } from '../auth/access-token.guard';
 
+import { ApiSuccessResponse } from '../../common/responses/api-success.decorator';
+
 import { UserService } from './user.service';
 
 import { MeResponseDto } from './dto/me.dto';
-import { AccessToken } from '../auth/access-token.decorator';
 
 @ApiTags('User')
 @ApiErrors('INTERNAL_ERROR')
@@ -22,7 +22,7 @@ export class UserController {
 
   @ApiBearerAuth('access-token')
   @UseGuards(AuthTokenGuard)
-  @ApiErrors('UNAUTHORIZED')
+  @ApiErrors('UNAUTHORIZED', 'NOT_FOUND')
   @Get('/me')
   @ApiOperation({
     summary: 'Get Authenticated User',

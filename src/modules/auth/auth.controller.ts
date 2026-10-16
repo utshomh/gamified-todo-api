@@ -1,5 +1,5 @@
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 
 import { ApiErrors } from '../../common/errors/api-errors.decorator';
 import { ApiSuccessResponse } from '../../common/responses/api-success.decorator';
@@ -21,7 +21,11 @@ export class AuthController {
     summary: 'Register an Auth User',
     description: 'Returns the registered user',
   })
-  @ApiSuccessResponse(RegisterResponseDto, 'Returns the registered user')
+  @ApiSuccessResponse(
+    RegisterResponseDto,
+    'Returns the registered user',
+    HttpStatus.CREATED,
+  )
   register(@Body() dto: RegisterDto): Promise<RegisterResponseDto> {
     return this.authService.register(dto);
   }
@@ -40,8 +44,9 @@ export class AuthController {
   @ApiErrors('BAD_REQUEST', 'UNAUTHORIZED')
   @Post('/rotate-token')
   @ApiOperation({
-    summary: 'Rotate/Refresh Access Token',
-    description: 'Rotates old Access Token with a new one',
+    summary: 'Rotate Refresh Token',
+    description:
+      'Consumes the refresh token and returns a new access/refresh pair',
   })
   @ApiSuccessResponse(
     RotateTokenResponseDto,

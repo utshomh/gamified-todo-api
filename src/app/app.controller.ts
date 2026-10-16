@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { ApiErrors } from '../common/errors/api-errors.decorator';
@@ -32,7 +32,11 @@ export class AppController {
     summary: 'Ping Server',
     description: 'Returns the string `pong`',
   })
-  @ApiSuccessResponse(PongResponseDto, 'Returns the string `pong`')
+  @ApiSuccessResponse(
+    PongResponseDto,
+    'Returns the string `pong`',
+    HttpStatus.CREATED,
+  )
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   pong(@Body() _dto: PingRequestDto): PongResponseDto {
     return this.appService.pong();

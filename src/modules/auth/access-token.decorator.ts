@@ -1,11 +1,15 @@
-import { Request } from 'express';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
-import { AccessTokenPayload } from './auth.types';
+import { AppError } from '../../common/errors/app-error';
 
-type AuthenticatedRequest = Request & { authPayload: AccessTokenPayload };
+import type { AccessTokenPayload, AuthenticatedRequest } from './auth.types';
 
 export const AccessToken = createParamDecorator(
-  (_data: unknown, context: ExecutionContext): AccessTokenPayload =>
-    context.switchToHttp().getRequest<AuthenticatedRequest>().authPayload,
+  (_data: unknown, context: ExecutionContext): AccessTokenPayload => {
+    const payload = context
+      .switchToHttp()
+      .getRequest<AuthenticatedRequest>().authPayload;
+    if (!payload) throw new AppError('UNAUTHORIZED');
+    return payload;
+  },
 );

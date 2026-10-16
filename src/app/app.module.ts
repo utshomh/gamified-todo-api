@@ -1,4 +1,3 @@
-import { JwtModule } from '@nestjs/jwt';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 import { RequestLoggerMiddleware } from '../common/middlewares/logger.middleware';
@@ -14,7 +13,7 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
 @Module({
-  imports: [AppConfigModule, PrismaModule, JwtModule, AuthModule, UserModule],
+  imports: [AppConfigModule, PrismaModule, AuthModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })

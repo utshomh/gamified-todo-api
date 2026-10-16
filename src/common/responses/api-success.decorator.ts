@@ -1,13 +1,16 @@
-import { applyDecorators, Type } from '@nestjs/common';
-import { ApiExtraModels, ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
+import { applyDecorators, HttpCode, HttpStatus, Type } from '@nestjs/common';
+import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 
 export function ApiSuccessResponse<TModel extends Type<unknown>>(
   model: TModel,
   description = 'Successful response',
+  status: number = HttpStatus.OK,
 ) {
   return applyDecorators(
     ApiExtraModels(model),
-    ApiOkResponse({
+    HttpCode(status),
+    ApiResponse({
+      status,
       description,
       schema: {
         type: 'object',

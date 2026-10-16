@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsString, Length } from 'class-validator';
 
 export class RotateTokenDto {
   @ApiProperty({
     example: 'signed&SecureRefreshToken',
   })
   @IsString()
+  @Length(1, 4096)
   refreshToken!: string;
 }
 

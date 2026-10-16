@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   ArgumentsHost,
   Catch,
@@ -8,7 +7,7 @@ import {
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 
-import { AppError } from './app-error';
+import { isAppError } from './app-error';
 import { ERROR_CATALOG, ErrorCode } from './error-catalog';
 import { genericCodeForStatus, isRecord } from './error.utils';
 
@@ -24,7 +23,7 @@ export class AppExceptionFilter implements ExceptionFilter {
     let message = ERROR_CATALOG.INTERNAL_ERROR.message as string;
     let details: Record<string, unknown> | undefined;
 
-    if (exception instanceof AppError) {
+    if (isAppError(exception)) {
       status = exception.status;
       code = exception.code;
       message = exception.message;

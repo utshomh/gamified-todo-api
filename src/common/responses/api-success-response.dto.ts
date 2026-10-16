@@ -1,10 +1,10 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ApiSuccessResponseDto<T> {
   @ApiProperty({ example: true })
   success!: true;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     type: 'object',
     additionalProperties: true,
   })

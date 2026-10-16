@@ -21,8 +21,8 @@ export const envSchema = z.object({
 
   JWT_ACCESS_SECRET: z.string().min(32),
   JWT_REFRESH_SECRET: z.string().min(32),
-  JWT_ACCESS_TTL: z.coerce.number().default(900),
-  JWT_REFRESH_TTL: z.coerce.number().default(604800000),
+  JWT_ACCESS_TTL: z.coerce.number().int().positive().default(900),
+  JWT_REFRESH_TTL: z.coerce.number().int().positive().default(604800),
 
   EMAIL_FROM: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),

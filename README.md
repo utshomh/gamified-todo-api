@@ -1,98 +1,67 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Gamified Todo API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS 11, PostgreSQL, Prisma, and TypeScript. Implemented endpoints cover authentication, current user, and server status. Todo, XP, progress, and daily activity currently have database models; their application workflows are still to be built.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Development
 
-## Description
+Use Node.js 24 and pnpm 11.25.0.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ pnpm install
+```sh
+pnpm install
+# Copy .env.example to .env and set your own JWT secrets.
+pnpm infra:up
+pnpm db:generate
+pnpm db:migrate
+pnpm start:dev
 ```
 
-## Compile and run the project
+Routes start with `/api/v1`; documentation is at `/docs` and the schema is at `/docs/openapi.json`. Production starts with `pnpm build` followed by `pnpm start:prod`.
 
-```bash
-# development
-$ pnpm run start
+JWT TTLs are positive integers measured in **seconds**: access defaults to `900`, refresh to `604800` (seven days). Replace the previous milliseconds value `604800000` with `604800` in deployed environment settings.
 
-# watch mode
-$ pnpm run start:dev
+## Authentication
 
-# production mode
-$ pnpm run start:prod
+Registration returns 201 with public user fields. Login and refresh rotation return 200 with an access/refresh token pair. Tokens use separate secrets, a required token type, and validated identity/expiry claims.
+
+Use `Authorization: Bearer <accessToken>` for `/api/v1/user/me`. Both token types require an active database session. Refresh rotation validates the stored token hash, atomically consumes the old session, and creates its replacement. Concurrent refresh calls allow only one success. Clients should coordinate refresh requests and replace both tokens together. Rotation also invalidates the old access token.
+
+Previously issued tokens lack the required token type and return 401 after this update; users must log in again. Session IDs are opaque UUIDs; user IDs retain their database CUID format.
+
+Public user responses contain only `id`, `displayName`, `email`, and `timezone`. Successes use `{ success: true, data, timestamp, path }`; errors use `{ success: false, statusCode, code, message, timestamp, path }` with optional `details`.
+
+## API contracts and typed client
+
+```sh
+pnpm api:generate  # build, export OpenAPI offline, and regenerate TypeScript
+pnpm api:check     # fail if checked-in schema or generated types are stale
+pnpm check        # lint, typecheck, unit tests, HTTP tests, and contract drift
 ```
 
-## Run tests
+```ts
+import { createApiClient } from './api/client';
 
-```bash
-# unit tests
-$ pnpm run test
+const api = createApiClient('http://localhost:3000');
 
-# e2e tests
-$ pnpm run test:e2e
+const { data, error } = await api.POST('/api/v1/auth/login', {
+  body: { email: 'example@email.com', password: 'Password@123' },
+});
 
-# test coverage
-$ pnpm run test:cov
+if (data) console.log(data.data.accessToken);
+if (error) console.log(error.code);
 ```
 
-## Deployment
+TypeScript does not validate untrusted JSON at runtime. Requests use the global ValidationPipe, JWT claims use Zod, and public database reads use explicit field selections. HTTP tests verify response envelopes and exact public user fields.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Tests
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+```sh
+pnpm test --runInBand
+pnpm test:e2e --runInBand
+pnpm test:integration
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Unit and HTTP tests need no infrastructure. Integration tests require `TEST_DATABASE_URL` pointing to a **dedicated, migrated test database**. They insert uniquely named users and clean up only those users. Coverage includes token misuse, session expiration/revocation/hash checks, concurrent registration, concurrent refresh, and transaction rollback.
 
-## Resources
+Provision a separate PostgreSQL database and set `DATABASE_URL` to its URL before running `pnpm db:deploy`. Set `TEST_DATABASE_URL` to the same URL before running `pnpm test:integration`.
 
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+CI provisions its own PostgreSQL database and runs all checks and integration tests.

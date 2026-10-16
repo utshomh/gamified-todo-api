@@ -1,33 +1,31 @@
-import { ConfigService } from '@nestjs/config';
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 
 import { PrismaService } from './prisma.service';
 import { AppConfigService } from '../config/app-config.service';
 
 describe('PrismaService', () => {
-  let service: PrismaService;
-
-  const getMock = jest.fn();
-
-  beforeEach(async () => {
-    getMock.mockReset();
-
-    const module: TestingModule = await Test.createTestingModule({
+  it('constructs the actual Prisma provider and disconnects on shutdown', async () => {
+    const module = await Test.createTestingModule({
       providers: [
-        AppConfigService,
+        PrismaService,
         {
-          provide: ConfigService,
+          provide: AppConfigService,
           useValue: {
-            get: getMock,
+            databaseUrl: 'postgresql://test:test@localhost:5432/test',
           },
         },
       ],
     }).compile();
 
-    service = module.get(AppConfigService);
-  });
+    const service = module.get(PrismaService);
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    // Prisma returns a proxy, so instanceof is not a reliable provider check.
+    expect(typeof service.onModuleDestroy).toBe('function');
+
+    const disconnect = jest.spyOn(service, '$disconnect').mockResolvedValue();
+
+    await module.close();
+
+    expect(disconnect).toHaveBeenCalledTimes(1);
   });
 });

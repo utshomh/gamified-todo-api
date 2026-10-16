@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ERROR_CATALOG, type ErrorCode } from './error-catalog';
 
 export class ApiErrorResponseDto {
-  @ApiProperty({ example: false })
+  @ApiProperty({ type: Boolean, enum: [false], example: false })
   success!: false;
 
   @ApiProperty({ example: 404 })

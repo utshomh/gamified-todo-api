@@ -1,60 +1,38 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
+import { SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
+
 import { AppConfigService } from './config/app-config.service';
 
-import { AppExceptionFilter } from './common/errors/app-exception.filter';
-import { ApiSuccessInterceptor } from './common/responses/api-success.interceptor';
+import { configureApp, createOpenApiDocument } from './app/setup-app';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const logger = new Logger('Bootstrap');
+  configureApp(app);
 
-  const appConfig = app.get(AppConfigService);
-
-  // Add Global Prefix and Enable Versioning
-  app.setGlobalPrefix('api');
-  app.enableVersioning({ type: VersioningType.URI });
-
-  // Validation Pipes
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
-    }),
-  );
-
-  // Interceptors
-  app.useGlobalInterceptors(new ApiSuccessInterceptor());
-
-  // Exception Filters
-  app.useGlobalFilters(new AppExceptionFilter());
-
-  // Build OpenAPI interactive docs with Swagger
-  const config = new DocumentBuilder()
-    .setTitle('Gamified Todo API')
-    .setDescription('Todo, progression, leaderboard, and notifications API')
-    .setVersion('1.0')
-    .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      'access-token',
-    )
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document, {
+  SwaggerModule.setup('docs', app, createOpenApiDocument(app), {
     jsonDocumentUrl: 'docs/openapi.json',
   });
 
-  // Start the application
+  const appConfig = app.get(AppConfigService);
+
   await app.listen(appConfig.port);
 
-  logger.log(`Starting the server at: ${appConfig.appUrl}`);
-  logger.log(`API doc is available at: ${appConfig.appUrl}/docs`);
+  const url = appConfig.appUrl ?? (await app.getUrl());
+
+  const logger = new Logger('Bootstrap');
+
+  logger.log(`Starting the server at: ${url}`);
+  logger.log(`API doc is available at: ${url}/docs`);
 }
 
-void bootstrap();
+bootstrap().catch((error: unknown) => {
+  new Logger('Bootstrap').error(
+    'Failed to start the API',
+    error instanceof Error ? error.stack : String(error),
+  );
+  process.exitCode = 1;
+});

@@ -1,40 +1,56 @@
-import { Request } from 'express';
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import type { Request } from 'express';
+
+import {
+  Injectable,
+  type CanActivate,
+  type ExecutionContext,
+} from '@nestjs/common';
 
 import { AppError } from '../../common/errors/app-error';
 
 import { JwtTokenService } from './jwt/jwt-token.service';
+import { AuthSessionService } from './auth-session.service';
+
+import type { AccessTokenPayload, AuthenticatedRequest } from './auth.types';
 
 @Injectable()
 export class AuthTokenGuard implements CanActivate {
-  constructor(private readonly jwtTokenService: JwtTokenService) {}
+  constructor(
+    private readonly jwtTokenService: JwtTokenService,
+    private readonly authSessionService: AuthSessionService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
+
     const token = this.extractJwtToken(request);
-    if (!token) {
+
+    if (!token)
       throw new AppError(
         'UNAUTHORIZED',
-        'No access token found. Please provide a valid access token in order to access this route.',
+        'Please provide a valid bearer access token.',
       );
-    }
+
+    let payload: AccessTokenPayload;
 
     try {
-      const payload = await this.jwtTokenService.verifyAccessToken(token);
-
-      request['authPayload'] = payload;
+      payload = await this.jwtTokenService.verifyAccessToken(token);
     } catch {
       throw new AppError(
         'UNAUTHORIZED',
-        'Invalid or Expired token. Please provide a valid access token in order to access this route.',
+        'The access token is invalid or expired.',
       );
     }
+
+    // Database failures remain server errors, rather than being hidden as 401s.
+    await this.authSessionService.requireActiveSession(payload);
+
+    request.authPayload = payload;
 
     return true;
   }
 
   extractJwtToken(request: Request) {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    return /^Bearer ([^\s]+)$/i.exec(request.headers.authorization ?? '')?.[1];
   }
 }

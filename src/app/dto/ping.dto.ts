@@ -5,6 +5,7 @@ export class PingRequestDto {
   @ApiProperty({
     description: 'The string `ping`',
     example: 'ping',
+    enum: ['ping'],
   })
   @Equals('ping')
   message!: 'ping';
@@ -14,6 +15,7 @@ export class PongResponseDto {
   @ApiProperty({
     description: 'The string `pong`',
     example: 'pong',
+    enum: ['pong'],
   })
   message!: 'pong';
 }

@@ -1,0 +1,1714 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/app/status": {
+      "get": {
+        "description": "Returns the current health and version information of the API.",
+        "operationId": "AppController_getStatus_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns application status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "success",
+                    "path",
+                    "data"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-08-06T09:52:00.000Z"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ],
+                      "example": true
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/v1/app/status"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/StatusResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                500
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "INTERNAL_ERROR"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "An unexpected error occurred"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "INTERNAL_ERROR": {
+                    "summary": "INTERNAL_ERROR",
+                    "value": {
+                      "success": false,
+                      "statusCode": 500,
+                      "code": "INTERNAL_ERROR",
+                      "message": "An unexpected error occurred",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get Server Status",
+        "tags": [
+          "Server Health Status"
+        ]
+      }
+    },
+    "/api/v1/app/ping": {
+      "post": {
+        "description": "Returns the string `pong`",
+        "operationId": "AppController_pong_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PingRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the string `pong`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "success",
+                    "path",
+                    "data"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-08-06T09:52:00.000Z"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ],
+                      "example": true
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/v1/app/status"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/PongResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body, query, or route parameters are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                400
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "BAD_REQUEST"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Request validation failed"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "BAD_REQUEST": {
+                    "summary": "BAD_REQUEST",
+                    "value": {
+                      "success": false,
+                      "statusCode": 400,
+                      "code": "BAD_REQUEST",
+                      "message": "Request validation failed",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                500
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "INTERNAL_ERROR"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "An unexpected error occurred"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "INTERNAL_ERROR": {
+                    "summary": "INTERNAL_ERROR",
+                    "value": {
+                      "success": false,
+                      "statusCode": 500,
+                      "code": "INTERNAL_ERROR",
+                      "message": "An unexpected error occurred",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Ping Server",
+        "tags": [
+          "Server Health Status"
+        ]
+      }
+    },
+    "/api/v1/app/health": {
+      "get": {
+        "description": "Checks and returns server health information",
+        "operationId": "AppController_health_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns server health",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "success",
+                    "path",
+                    "data"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-08-06T09:52:00.000Z"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ],
+                      "example": true
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/v1/app/status"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/HealthResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                500
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "INTERNAL_ERROR"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "An unexpected error occurred"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "INTERNAL_ERROR": {
+                    "summary": "INTERNAL_ERROR",
+                    "value": {
+                      "success": false,
+                      "statusCode": 500,
+                      "code": "INTERNAL_ERROR",
+                      "message": "An unexpected error occurred",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Server Health",
+        "tags": [
+          "Server Health Status"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "description": "Returns the registered user",
+        "operationId": "AuthController_register_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the registered user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "success",
+                    "path",
+                    "data"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-08-06T09:52:00.000Z"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ],
+                      "example": true
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/v1/app/status"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/RegisterResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body, query, or route parameters are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                400
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "BAD_REQUEST"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Request validation failed"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "BAD_REQUEST": {
+                    "summary": "BAD_REQUEST",
+                    "value": {
+                      "success": false,
+                      "statusCode": 400,
+                      "code": "BAD_REQUEST",
+                      "message": "Request validation failed",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The requested operation cannot be performed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                409
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "CONFLICT"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "The request conflicts with the current state"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "CONFLICT": {
+                    "summary": "CONFLICT",
+                    "value": {
+                      "success": false,
+                      "statusCode": 409,
+                      "code": "CONFLICT",
+                      "message": "The request conflicts with the current state",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                500
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "INTERNAL_ERROR"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "An unexpected error occurred"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "INTERNAL_ERROR": {
+                    "summary": "INTERNAL_ERROR",
+                    "value": {
+                      "success": false,
+                      "statusCode": 500,
+                      "code": "INTERNAL_ERROR",
+                      "message": "An unexpected error occurred",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Register an Auth User",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "description": "Returns the Access and Refresh Token",
+        "operationId": "AuthController_login_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Access and Refresh Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "success",
+                    "path",
+                    "data"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-08-06T09:52:00.000Z"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ],
+                      "example": true
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/v1/app/status"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/LoginResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body, query, or route parameters are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                400
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "BAD_REQUEST"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Request validation failed"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "BAD_REQUEST": {
+                    "summary": "BAD_REQUEST",
+                    "value": {
+                      "success": false,
+                      "statusCode": 400,
+                      "code": "BAD_REQUEST",
+                      "message": "Request validation failed",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The access token is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                401
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "UNAUTHORIZED"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Authentication is required"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "UNAUTHORIZED": {
+                    "summary": "UNAUTHORIZED",
+                    "value": {
+                      "success": false,
+                      "statusCode": 401,
+                      "code": "UNAUTHORIZED",
+                      "message": "Authentication is required",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                500
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "INTERNAL_ERROR"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "An unexpected error occurred"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "INTERNAL_ERROR": {
+                    "summary": "INTERNAL_ERROR",
+                    "value": {
+                      "success": false,
+                      "statusCode": 500,
+                      "code": "INTERNAL_ERROR",
+                      "message": "An unexpected error occurred",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Logs in an User",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/rotate-token": {
+      "post": {
+        "description": "Consumes the refresh token and returns a new access/refresh pair",
+        "operationId": "AuthController_rotateToken_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RotateTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the Access and Refresh Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "success",
+                    "path",
+                    "data"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-08-06T09:52:00.000Z"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ],
+                      "example": true
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/v1/app/status"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/RotateTokenResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body, query, or route parameters are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                400
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "BAD_REQUEST"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Request validation failed"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "BAD_REQUEST": {
+                    "summary": "BAD_REQUEST",
+                    "value": {
+                      "success": false,
+                      "statusCode": 400,
+                      "code": "BAD_REQUEST",
+                      "message": "Request validation failed",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The access token is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                401
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "UNAUTHORIZED"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Authentication is required"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "UNAUTHORIZED": {
+                    "summary": "UNAUTHORIZED",
+                    "value": {
+                      "success": false,
+                      "statusCode": 401,
+                      "code": "UNAUTHORIZED",
+                      "message": "Authentication is required",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                500
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "INTERNAL_ERROR"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "An unexpected error occurred"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "INTERNAL_ERROR": {
+                    "summary": "INTERNAL_ERROR",
+                    "value": {
+                      "success": false,
+                      "statusCode": 500,
+                      "code": "INTERNAL_ERROR",
+                      "message": "An unexpected error occurred",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Rotate Refresh Token",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/user/me": {
+      "get": {
+        "description": "Returns the currently authenticated user",
+        "operationId": "UserController_me_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Returns the currently authenticated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "timestamp",
+                    "success",
+                    "path",
+                    "data"
+                  ],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2026-08-06T09:52:00.000Z"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        true
+                      ],
+                      "example": true
+                    },
+                    "path": {
+                      "type": "string",
+                      "example": "/api/v1/app/status"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/MeResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The access token is missing or invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                401
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "UNAUTHORIZED"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Authentication is required"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "UNAUTHORIZED": {
+                    "summary": "UNAUTHORIZED",
+                    "value": {
+                      "success": false,
+                      "statusCode": 401,
+                      "code": "UNAUTHORIZED",
+                      "message": "Authentication is required",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                404
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "NOT_FOUND"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Resource not found"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "NOT_FOUND": {
+                    "summary": "NOT_FOUND",
+                    "value": {
+                      "success": false,
+                      "statusCode": 404,
+                      "code": "NOT_FOUND",
+                      "message": "Resource not found",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server encountered an unexpected condition.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/ApiErrorResponseDto"
+                        },
+                        {
+                          "type": "object",
+                          "required": [
+                            "statusCode",
+                            "code",
+                            "message"
+                          ],
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "statusCode": {
+                              "type": "integer",
+                              "enum": [
+                                500
+                              ]
+                            },
+                            "code": {
+                              "type": "string",
+                              "enum": [
+                                "INTERNAL_ERROR"
+                              ]
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "An unexpected error occurred"
+                            },
+                            "details": {}
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "examples": {
+                  "INTERNAL_ERROR": {
+                    "summary": "INTERNAL_ERROR",
+                    "value": {
+                      "success": false,
+                      "statusCode": 500,
+                      "code": "INTERNAL_ERROR",
+                      "message": "An unexpected error occurred",
+                      "timestamp": "2004-07-09T00:00:00.000Z",
+                      "path": "/api/v1/foo-bar",
+                      "details": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Get Authenticated User",
+        "tags": [
+          "User"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Gamified Todo API",
+    "description": "Todo, progression, leaderboard, and notifications API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "ApiErrorResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              false
+            ],
+            "example": false
+          },
+          "statusCode": {
+            "type": "number",
+            "example": 404
+          },
+          "code": {
+            "enum": [
+              "BAD_REQUEST",
+              "UNAUTHORIZED",
+              "FORBIDDEN",
+              "NOT_FOUND",
+              "CONFLICT",
+              "INTERNAL_ERROR"
+            ],
+            "type": "string",
+            "example": "NOT_FOUND"
+          },
+          "message": {
+            "type": "string",
+            "example": "Resource not found"
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-06T00:00:00.000Z"
+          },
+          "path": {
+            "type": "string",
+            "example": "/api/v1/foo-bar"
+          }
+        },
+        "required": [
+          "success",
+          "statusCode",
+          "code",
+          "message",
+          "timestamp",
+          "path"
+        ]
+      },
+      "StatusResponseDto": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "string",
+            "example": "foo-bar-api",
+            "description": "Current service name"
+          },
+          "status": {
+            "type": "string",
+            "example": "ok",
+            "description": "Current server status"
+          },
+          "version": {
+            "type": "string",
+            "example": "1.0.0",
+            "description": "API version"
+          }
+        },
+        "required": [
+          "service",
+          "status",
+          "version"
+        ]
+      },
+      "PongResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The string `pong`",
+            "example": "pong",
+            "enum": [
+              "pong"
+            ]
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "PingRequestDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The string `ping`",
+            "example": "ping",
+            "enum": [
+              "ping"
+            ]
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "HealthResponseDto": {
+        "type": "object",
+        "properties": {
+          "up": {
+            "type": "boolean",
+            "example": true,
+            "description": "Returns server status"
+          },
+          "databaseIsReady": {
+            "type": "boolean",
+            "example": true,
+            "description": "Returns database health status"
+          }
+        },
+        "required": [
+          "up",
+          "databaseIsReady"
+        ]
+      },
+      "RegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "userIdInCuid"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "Example"
+          },
+          "email": {
+            "type": "string",
+            "example": "example@email.com"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "Asia/Dhaka"
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "email",
+          "timezone"
+        ]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 18,
+            "pattern": "^[a-zA-Z0-9_]+$",
+            "example": "Example"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "example@email.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 64,
+            "pattern": "[a-z]",
+            "example": "Password@123",
+            "format": "password"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "Asia/Dhaka"
+          }
+        },
+        "required": [
+          "displayName",
+          "email",
+          "password",
+          "timezone"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "signed&SecureAccessToken"
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "signed&SecureRefreshToken"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "example@email.com"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "Password@123",
+            "format": "password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RotateTokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "signed&SecureAccessToken"
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "signed&SecureRefreshToken"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken"
+        ]
+      },
+      "RotateTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096,
+            "example": "signed&SecureRefreshToken"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "MeResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "userIdInCuid"
+          },
+          "displayName": {
+            "type": "string",
+            "example": "Example"
+          },
+          "email": {
+            "type": "string",
+            "example": "example@email.com"
+          },
+          "timezone": {
+            "type": "string",
+            "example": "Asia/Dhaka"
+          }
+        },
+        "required": [
+          "id",
+          "displayName",
+          "email",
+          "timezone"
+        ]
+      }
+    }
+  }
+}

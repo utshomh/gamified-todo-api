@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsStrongPassword } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
 
 export class LoginDto {
   @ApiProperty({
     example: 'example@email.com',
   })
   @IsEmail()
-  @Transform(({ value }) =>
+  @Transform(({ value }: { value: unknown }) =>
     typeof value === 'string' ? value.trim().toLowerCase() : value,
   )
   email!: string;
@@ -19,13 +18,8 @@ export class LoginDto {
     maxLength: 64,
     format: 'password',
   })
-  @IsStrongPassword({
-    minLength: 8,
-    minNumbers: 1,
-    minSymbols: 1,
-    minLowercase: 1,
-    minUppercase: 1,
-  })
+  @IsString()
+  @Length(8, 64)
   password!: string;
 }
 

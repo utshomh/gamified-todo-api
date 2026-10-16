@@ -14,3 +14,7 @@ export class AppError<C extends ErrorCode> extends Error {
     this.status = ERROR_CATALOG[code].status;
   }
 }
+
+export function isAppError(error: unknown): error is AppError<ErrorCode> {
+  return error instanceof AppError;
+}
